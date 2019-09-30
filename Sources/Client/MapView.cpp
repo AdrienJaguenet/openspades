@@ -482,10 +482,6 @@ namespace spades {
 					// The player is non-existent or dead
 					continue;
 				}
-				if (!localPlayer.IsSpectator() && localPlayer.GetTeamId() != p->GetTeamId()) {
-					// Duh
-					continue;
-				}
 				if (p->IsSpectator() && p == &localPlayer &&
 				    HasTargetPlayer(client->GetCameraMode())) {
 					// Don't draw white icon when spectating a player
