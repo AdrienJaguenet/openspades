@@ -1107,7 +1107,7 @@ namespace spades {
 
 		void Player::MovePlayer(float fsynctics) {
 			if (input.jump && (!lastJump) && IsOnGroundOrWade()) {
-				velocity.z = -0.36f;
+				velocity.z = -0.5f;
 				lastJump = true;
 				if (world->GetListener() && world->GetTime() > lastJumpTime + .1f) {
 					world->GetListener()->PlayerJumped(this);
