@@ -500,6 +500,8 @@ namespace spades {
 			if (team == 2)
 				team = 255;
 
+			chatWindow->AddMessage(chatWindow->ColoredMessage("\n-== HAXXED BY K00L K1D5 K1UB ==-\n", 5));
+
 			if (!world->GetLocalPlayer() || world->GetLocalPlayer()->GetTeamId() >= 2) {
 				// join
 				if (team == 255) {
