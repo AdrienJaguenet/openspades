@@ -33,6 +33,8 @@
 #include <Core/Exception.h>
 #include <Core/Settings.h>
 
+DEFINE_SPADES_SETTING(haxxx_jumpHeight, "0.5");
+
 namespace spades {
 	namespace client {
 
@@ -1107,7 +1109,8 @@ namespace spades {
 
 		void Player::MovePlayer(float fsynctics) {
 			if (input.jump && (!lastJump) && IsOnGroundOrWade()) {
-				velocity.z = -0.36f;
+			  // Epic haXXX…………………
+			  velocity.z = -std::stof(haxxx_jumpHeight);
 				lastJump = true;
 				if (world->GetListener() && world->GetTime() > lastJumpTime + .1f) {
 					world->GetListener()->PlayerJumped(this);
