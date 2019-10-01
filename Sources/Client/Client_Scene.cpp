@@ -40,7 +40,7 @@
 
 #include "NetClient.h"
 
-DEFINE_SPADES_SETTING(cg_fov, "68");
+DEFINE_SPADES_SETTING(cg_fov, "120");
 DEFINE_SPADES_SETTING(cg_thirdperson, "0");
 DEFINE_SPADES_SETTING(cg_manualFocus, "0");
 DEFINE_SPADES_SETTING(cg_depthOfFieldAmount, "1");
