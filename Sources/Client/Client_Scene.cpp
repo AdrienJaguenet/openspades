@@ -150,8 +150,8 @@ namespace spades {
 
 			// Limit the range of cg_fov
 			// (note: comparsion with a NaN always results in false)
-			if (!((float)cg_fov < 90.0f)) {
-				cg_fov = 90.0f;
+			if (!((float)cg_fov < 180.0f)) {
+				cg_fov = 180.0f;
 			}
 			if (!((float)cg_fov > 45.0f)) {
 				cg_fov = 45.0f;
