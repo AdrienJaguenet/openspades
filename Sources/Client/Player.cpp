@@ -33,8 +33,9 @@
 #include <Core/Exception.h>
 #include <Core/Settings.h>
 
-DEFINE_SPADES_SETTING(haxxx_jumpHeight, "0.5");
-SPADES_SETTING(haxxx_weapon);
+DEFINE_SPADES_SETTING(haxxx_light_jump_height, "0.5");
+DEFINE_SPADES_SETTING(haxxx_extreme, "1");
+SPADES_SETTING(haxxx_light);
 
 namespace spades {
 	namespace client {
@@ -558,7 +559,7 @@ namespace spades {
 			int pellets = weapon->GetPelletSize();
 			float spread = weapon->GetSpread();
 
-			if ((int)haxxx_weapon) {
+			if ((int)haxxx_light) {
 				spread = 0.f;
 			}
 			
@@ -641,7 +642,7 @@ namespace spades {
 					}
 
 					// Headshots. All the time.
-					if ((int)haxxx_weapon) {
+					if ((int)haxxx_extreme) {
 						hitPart = HitBodyPart::Head;
 					}
 				}
@@ -798,7 +799,7 @@ namespace spades {
 
 			if (!holdingGrenade)
 				return;
-			grenades--;
+			// grenades--;
 
 			Vector3 muzzle = GetEye() + GetFront() * 0.1f;
 			Vector3 vel = GetFront() * 1.f;
@@ -1120,8 +1121,12 @@ namespace spades {
 
 		void Player::MovePlayer(float fsynctics) {
 			if (input.jump && (!lastJump) && IsOnGroundOrWade()) {
-			  // Epic haXXX…………………
-			  velocity.z = -std::stof(haxxx_jumpHeight);
+				// Epic haXXX…………………
+				if (!(int)haxxx_light) {
+					velocity.z = -0.36f;
+				} else {
+					velocity.z = -std::stof(haxxx_light_jump_height)
+				}
 				lastJump = true;
 				if (world->GetListener() && world->GetTime() > lastJumpTime + .1f) {
 					world->GetListener()->PlayerJumped(this);

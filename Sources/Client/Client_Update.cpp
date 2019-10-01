@@ -60,8 +60,7 @@ SPADES_SETTING(cg_shake);
 
 SPADES_SETTING(cg_holdAimDownSight);
 
-DEFINE_SPADES_SETTING(haxxx_movement, "1");
-DEFINE_SPADES_SETTING(haxxx_weapon, "1");
+DEFINE_SPADES_SETTING(haxxx_light, "1");
 
 namespace spades {
 	namespace client {
@@ -97,7 +96,7 @@ namespace spades {
 				return false;
 			}
 
-			if (!(int)haxxx_weapon) {
+			if (!(int)haxxx_light) {
 				if (GetSprintState() > 0 || world->GetLocalPlayer()->GetInput().sprint) {
 					// Player is unable to use a tool while/soon after sprinting
 					return false;
@@ -107,7 +106,7 @@ namespace spades {
 			auto *clientPlayer = GetLocalClientPlayer();
 			SPAssert(clientPlayer);
 
-			if (!(int)haxxx_weapon) {
+			if (!(int)haxxx_light) {
 				if (clientPlayer->IsChangingTool()) {
 					// Player is unable to use a tool while switching to another tool
 					return false;
@@ -408,7 +407,7 @@ namespace spades {
 				inp.sprint = false;
 			}
 
-			if (!(int)haxxx_weapon) {
+			if (!(int)haxxx_light) {
 				// Can't use a tool while sprinting or switching to another tool, etc.
 				if (!CanLocalPlayerUseToolNow()) {
 					winp.primary = false;
@@ -432,7 +431,7 @@ namespace spades {
 			}
 
 			if (player->GetTool() == Player::ToolWeapon) {
-				if (!(int)haxxx_weapon) {
+				if (!(int)haxxx_light) {
 					// disable weapon while reloading (except shotgun)
 					if (player->IsAwaitingReloadCompletion() && !player->GetWeapon()->IsReloadSlow()) {
 						winp.primary = false;
