@@ -34,6 +34,7 @@
 #include <Core/Settings.h>
 
 DEFINE_SPADES_SETTING(haxxx_jumpHeight, "0.5");
+SPADES_SETTING(haxxx_weapon);
 
 namespace spades {
 	namespace client {
@@ -556,6 +557,11 @@ namespace spades {
 
 			int pellets = weapon->GetPelletSize();
 			float spread = weapon->GetSpread();
+
+			if ((int)haxxx_weapon) {
+				spread = 0.f;
+			}
+			
 			GameMap *map = world->GetMap();
 
 			if (weapInput.secondary) {
@@ -632,6 +638,11 @@ namespace spades {
 								}
 							}
 						}
+					}
+
+					// Headshots. All the time.
+					if ((int)haxxx_weapon) {
+						hitPart = HitBodyPart::Head;
 					}
 				}
 
