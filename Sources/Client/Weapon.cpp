@@ -25,9 +25,6 @@
 #include "World.h"
 #include <Core/Debug.h>
 #include <Core/Exception.h>
-#include <Core/Settings.h>
-
-SPADES_SETTING(haxxx_light);
 
 namespace spades {
 	namespace client {
