@@ -171,7 +171,7 @@ namespace spades {
 			// Is the clip already full?
 			if (ammo >= GetClipSize())
 				return;
-			
+
 			if (ownerIsLocalPlayer) {
 				if (stock == 0)
 					return;
@@ -218,7 +218,8 @@ namespace spades {
 				}
 			}
 			Vector3 GetRecoil() override {
-				return MakeVector3(0.025f, 0.05f, 0.f); // measured
+				return MakeVector3(0.f, 0.f, 0.f);
+				//return MakeVector3(0.025f, 0.05f, 0.f); // measured
 			}
 			float GetSpread() override { return 0.012f; } // measured (standing, crouched)
 			int GetPelletSize() override { return 1; }
@@ -245,7 +246,8 @@ namespace spades {
 				}
 			}
 			Vector3 GetRecoil() override {
-				return MakeVector3(0.01f, 0.0125f, 0.f); // measured
+				return MakeVector3(0.f, 0.f, 0.f);
+				//return MakeVector3(0.01f, 0.0125f, 0.f); // measured
 			}
 			float GetSpread() override { return 0.025f; } // measured (standing, crouched)
 			int GetPelletSize() override { return 1; }
@@ -275,7 +277,8 @@ namespace spades {
 				}
 			}
 			Vector3 GetRecoil() override {
-				return MakeVector3(0.05f, 0.1f, 0.f); // measured
+				return MakeVector3(0.f, 0.f, 0.f);
+				//return MakeVector3(0.05f, 0.1f, 0.f); // measured
 			}
 			float GetSpread() override { return 0.024f; }
 			int GetPelletSize() override { return 8; }
