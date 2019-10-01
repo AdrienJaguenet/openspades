@@ -55,6 +55,9 @@ DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponZ, "0");
 
+DEFINE_SPADES_SETTING(haxxx_animations, "1");
+SPADES_SETTING(haxxx_movement);
+
 namespace spades {
 	namespace client {
 
@@ -335,32 +338,26 @@ namespace spades {
 			WeaponInput actualWeapInput = player->GetWeaponInput();
 
 
-#if 1
-// NO SMOOTHING
-			if (actualInput.sprint && player->IsAlive()) {
-				sprintState = 1.f;//std::min(1.f, sprintState + 0.5f);
+			if (!(int)haxxx_movement) {
+				if (actualInput.sprint && player->IsAlive()) {
+					sprintState = 1.f;//std::min(1.f, sprintState + 0.5f);
+				} else {
+					sprintState = 0.f;//std::max(0.f, sprintState - 0.5f);
+				}
 			} else {
-				sprintState = 0.f;//std::max(0.f, sprintState - 0.5f);
+				if (actualInput.sprint && player->IsAlive()) {
+					sprintState += dt * 4.f;
+					if (sprintState > 1.f)
+						sprintState = 1.f;
+				} else {
+					sprintState -= dt * 3.f;
+					if (sprintState < 0.f)
+						sprintState = 0.f;
+				}
 			}
-#endif
-
-#if 0
-			if (actualInput.sprint && player->IsAlive()) {
-				sprintState += dt * 4.f;
-				if (sprintState > 1.f)
-					sprintState = 1.f;
-			} else {
-				sprintState -= dt * 3.f;
-				if (sprintState < 0.f)
-					sprintState = 0.f;
-			}
-#endif
 
 			if (actualWeapInput.secondary && player->IsToolWeapon() && player->IsAlive()) {
-				// This is the only animation that can be turned off
-				// here; others affect the gameplay directly and
-				// turning them off would be considered cheating
-				if (cg_animations) {
+			        if (!(int)haxxx_animations) {
 					aimDownState += dt * 8.f;
 					if (aimDownState > 1.f)
 						aimDownState = 1.f;
@@ -368,7 +365,7 @@ namespace spades {
 					aimDownState = 1.f;
 				}
 			} else {
-				if (cg_animations) {
+			        if (!(int)haxxx_animations) {
 					aimDownState -= dt * 3.f;
 					if (aimDownState < 0.f)
 						aimDownState = 0.f;
@@ -378,14 +375,23 @@ namespace spades {
 			}
 
 			if (currentTool == player->GetTool()) {
-				toolRaiseState += dt * 4.f;
-				if (toolRaiseState > 1.f)
+				if(!(int)haxxx_animations) {
 					toolRaiseState = 1.f;
-				if (toolRaiseState < 0.f)
-					toolRaiseState = 0.f;
+				} else {
+					toolRaiseState += dt * 4.f;
+					if (toolRaiseState > 1.f)
+						toolRaiseState = 1.f;
+					if (toolRaiseState < 0.f)
+						toolRaiseState = 0.f;
+				}
 			} else {
-				toolRaiseState -= dt * 4.f;
-				if (toolRaiseState < 0.f) {
+				if (!(int)haxxx_animations) {
+					toolRaiseState -= dt * 4.f;
+				} else {
+			  		toolRaiseState = 0.f;
+			  	}
+				
+				if (toolRaiseState <= 0.f) {
 					toolRaiseState = 0.f;
 					currentTool = player->GetTool();
 

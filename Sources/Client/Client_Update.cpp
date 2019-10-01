@@ -60,6 +60,9 @@ SPADES_SETTING(cg_shake);
 
 SPADES_SETTING(cg_holdAimDownSight);
 
+DEFINE_SPADES_SETTING(haxxx_movement, "1");
+DEFINE_SPADES_SETTING(haxxx_weapon, "1");
+
 namespace spades {
 	namespace client {
 
@@ -94,17 +97,21 @@ namespace spades {
 				return false;
 			}
 
-			if (GetSprintState() > 0 || world->GetLocalPlayer()->GetInput().sprint) {
-				// Player is unable to use a tool while/soon after sprinting
-				return false;
+			if (!(int)haxxx_weapon) {
+				if (GetSprintState() > 0 || world->GetLocalPlayer()->GetInput().sprint) {
+					// Player is unable to use a tool while/soon after sprinting
+					return false;
+				}
 			}
 
 			auto *clientPlayer = GetLocalClientPlayer();
 			SPAssert(clientPlayer);
 
-			if (clientPlayer->IsChangingTool()) {
-				// Player is unable to use a tool while switching to another tool
-				return false;
+			if (!(int)haxxx_weapon) {
+				if (clientPlayer->IsChangingTool()) {
+					// Player is unable to use a tool while switching to another tool
+					return false;
+				}
 			}
 
 			return true;
@@ -401,10 +408,12 @@ namespace spades {
 				inp.sprint = false;
 			}
 
-			// Can't use a tool while sprinting or switching to another tool, etc.
-			if (!CanLocalPlayerUseToolNow()) {
-				winp.primary = false;
-				winp.secondary = false;
+			if (!(int)haxxx_weapon) {
+				// Can't use a tool while sprinting or switching to another tool, etc.
+				if (!CanLocalPlayerUseToolNow()) {
+					winp.primary = false;
+					winp.secondary = false;
+				}
 			}
 
 			// don't allow to stand up when ceilings are too low
@@ -423,10 +432,12 @@ namespace spades {
 			}
 
 			if (player->GetTool() == Player::ToolWeapon) {
-				// disable weapon while reloading (except shotgun)
-				if (player->IsAwaitingReloadCompletion() && !player->GetWeapon()->IsReloadSlow()) {
-					winp.primary = false;
-					winp.secondary = false;
+				if (!(int)haxxx_weapon) {
+					// disable weapon while reloading (except shotgun)
+					if (player->IsAwaitingReloadCompletion() && !player->GetWeapon()->IsReloadSlow()) {
+						winp.primary = false;
+						winp.secondary = false;
+					}
 				}
 
 				// stop firing if the player is out of ammo
