@@ -44,7 +44,8 @@ DEFINE_SPADES_SETTING(cg_fov, "120");
 DEFINE_SPADES_SETTING(cg_thirdperson, "0");
 DEFINE_SPADES_SETTING(cg_manualFocus, "0");
 DEFINE_SPADES_SETTING(cg_depthOfFieldAmount, "1");
-DEFINE_SPADES_SETTING(cg_shake, "0");
+
+SPADES_SETTING(haxxx_animations);
 
 namespace spades {
 	namespace client {
@@ -141,7 +142,7 @@ namespace spades {
 		SceneDefinition Client::CreateSceneDefinition() {
 			SPADES_MARK_FUNCTION();
 
-			int shakeLevel = cg_shake;
+			int shakeLevel = (int)haxxx_animations ? 0 : 1;
 
 			SceneDefinition def;
 			def.time = (unsigned int)(time * 1000.f);
