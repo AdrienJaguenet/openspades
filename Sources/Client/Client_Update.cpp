@@ -281,6 +281,8 @@ namespace spades {
 
 			Vector3 lastPos = freeState.position;
 			freeState.velocity *= powf(.3f, dt);
+			// no smooth?
+			freeState.velocity = Vector3{0,0,0};
 			freeState.position += freeState.velocity * dt;
 
 			if (freeState.position.x < 0.f) {

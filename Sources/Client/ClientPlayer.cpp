@@ -333,6 +333,18 @@ namespace spades {
 
 			PlayerInput actualInput = player->GetInput();
 			WeaponInput actualWeapInput = player->GetWeaponInput();
+
+
+#if 1
+// NO SMOOTHING
+			if (actualInput.sprint && player->IsAlive()) {
+				sprintState = 1.f;//std::min(1.f, sprintState + 0.5f);
+			} else {
+				sprintState = 0.f;//std::max(0.f, sprintState - 0.5f);
+			}
+#endif
+
+#if 0
 			if (actualInput.sprint && player->IsAlive()) {
 				sprintState += dt * 4.f;
 				if (sprintState > 1.f)
@@ -342,6 +354,7 @@ namespace spades {
 				if (sprintState < 0.f)
 					sprintState = 0.f;
 			}
+#endif
 
 			if (actualWeapInput.secondary && player->IsToolWeapon() && player->IsAlive()) {
 				// This is the only animation that can be turned off
