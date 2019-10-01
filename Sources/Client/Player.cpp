@@ -799,7 +799,8 @@ namespace spades {
 
 			if (!holdingGrenade)
 				return;
-			// grenades--;
+
+			grenades--;
 
 			Vector3 muzzle = GetEye() + GetFront() * 0.1f;
 			Vector3 vel = GetFront() * 1.f;
@@ -1111,7 +1112,12 @@ namespace spades {
 		}
 
 		void Player::ForceJump() {
-			velocity.z = -0.36f;
+			if (!(int)haxxx_light) {
+				velocity.z = -0.36f;
+			} else {
+				velocity.z = -std::stof(haxxx_light_jump_height);
+			}
+
 			lastJump = true;
 			if (world->GetListener() && world->GetTime() > lastJumpTime + .1f) {
 				world->GetListener()->PlayerJumped(this);
@@ -1125,7 +1131,7 @@ namespace spades {
 				if (!(int)haxxx_light) {
 					velocity.z = -0.36f;
 				} else {
-					velocity.z = -std::stof(haxxx_light_jump_height)
+					velocity.z = -std::stof(haxxx_light_jump_height);
 				}
 				lastJump = true;
 				if (world->GetListener() && world->GetTime() > lastJumpTime + .1f) {
@@ -1152,9 +1158,12 @@ namespace spades {
 			// no it shouldn't LOL
 			const float maxVertLookSlowdown = 0.9f;
 			const float vertLookSlowdownStart = 0.65f; // about 40 degrees
-			float slowdownByVertLook = 0.0f;/*
-			  std::max(std::abs(GetFront().z) - vertLookSlowdownStart, 0.0f) /
-			  (1.0f - vertLookSlowdownStart) * maxVertLookSlowdown;*/
+
+			float slowdownByVertLook = std::max(std::abs(GetFront().z) - vertLookSlowdownStart, 0.0f) / (1.0f - vertLookSlowdownStart) * maxVertLookSlowdown;
+			
+			if ((int)haxxx_light) {
+				slowdownByVertLook = 0.0f;
+			}
 
 			Vector3 front = GetFront2D() * (1.0f - slowdownByVertLook);
 			Vector3 left = GetLeft();
