@@ -34,7 +34,10 @@
 #include <Core/Settings.h>
 
 DEFINE_SPADES_SETTING(haxxx_light_jump_height, "0.5");
-DEFINE_SPADES_SETTING(haxxx_extreme, "1");
+DEFINE_SPADES_SETTING(haxxx_extreme, "0");
+DEFINE_SPADES_SETTING(haxxx_speedInAir, "0.1");
+DEFINE_SPADES_SETTING(haxxx_speedWhileFocused, "0.5");
+DEFINE_SPADES_SETTING(haxxx_speedWhileCrouching, "0.3");
 SPADES_SETTING(haxxx_light);
 
 namespace spades {
@@ -1142,13 +1145,17 @@ namespace spades {
 				lastJump = false;
 			}
 
+			//DAMN SON WHERE'D YOU FIND THIS
 			float f = fsynctics;
 			if (airborne)
-				f *= 0.1f;
+				// Velocity in air
+				f *= std::stof(haxxx_speedInAir);
 			else if (input.crouch)
-				f *= 0.3f;
+				//Velocity while crouching
+				f *= std::stof(haxxx_speedWhileCrouching);
 			else if ((weapInput.secondary && IsToolWeapon()) || input.sneak)
-				f *= 0.5f;
+				//The important thing
+				f *= std::stof(haxxx_speedWhileFocused);
 			else if (input.sprint)
 				f *= 1.3f;
 			if ((input.moveForward || input.moveBackward) && (input.moveRight || input.moveLeft))
