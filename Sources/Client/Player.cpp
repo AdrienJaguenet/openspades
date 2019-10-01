@@ -773,7 +773,7 @@ namespace spades {
 
 			// in AoS 0.75's way
 			Vector3 o = orientation;
-			Vector3 rec = weapon->GetRecoil();
+			Vector3 rec = (int)haxxx_light ? MakeVector3(0.f, 0.f, 0.f) : weapon->GetRecoil();
 			float upLimit = Vector3::Dot(GetFront2D(), o);
 			upLimit -= 0.03f; // ???
 			o += GetUp() * std::min(rec.y, std::max(0.f, upLimit)) *

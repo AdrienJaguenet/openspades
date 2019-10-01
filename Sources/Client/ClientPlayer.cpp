@@ -55,8 +55,7 @@ DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponZ, "0");
 
-DEFINE_SPADES_SETTING(haxxx_animations, "1");
-SPADES_SETTING(haxxx_movement);
+SPADES_SETTING(haxxx_light);
 
 namespace spades {
 	namespace client {
@@ -338,7 +337,7 @@ namespace spades {
 			WeaponInput actualWeapInput = player->GetWeaponInput();
 
 
-			if (!(int)haxxx_movement) {
+			if (!(int)haxxx_light) {
 				if (actualInput.sprint && player->IsAlive()) {
 					sprintState = 1.f;//std::min(1.f, sprintState + 0.5f);
 				} else {
@@ -357,7 +356,7 @@ namespace spades {
 			}
 
 			if (actualWeapInput.secondary && player->IsToolWeapon() && player->IsAlive()) {
-			        if (!(int)haxxx_animations) {
+			        if (!(int)haxxx_light) {
 					aimDownState += dt * 8.f;
 					if (aimDownState > 1.f)
 						aimDownState = 1.f;
@@ -365,7 +364,7 @@ namespace spades {
 					aimDownState = 1.f;
 				}
 			} else {
-			        if (!(int)haxxx_animations) {
+			        if (!(int)haxxx_light) {
 					aimDownState -= dt * 3.f;
 					if (aimDownState < 0.f)
 						aimDownState = 0.f;
@@ -375,7 +374,7 @@ namespace spades {
 			}
 
 			if (currentTool == player->GetTool()) {
-				if(!(int)haxxx_animations) {
+				if(!(int)haxxx_light) {
 					toolRaiseState = 1.f;
 				} else {
 					toolRaiseState += dt * 4.f;
@@ -385,7 +384,7 @@ namespace spades {
 						toolRaiseState = 0.f;
 				}
 			} else {
-				if (!(int)haxxx_animations) {
+				if (!(int)haxxx_light) {
 					toolRaiseState -= dt * 4.f;
 				} else {
 			  		toolRaiseState = 0.f;
@@ -819,7 +818,10 @@ namespace spades {
 						mat = eyeMatrix * mat;
 
 						param.matrix = mat;
-						renderer->RenderModel(model, param);
+
+						if (!(int)haxxx_light) {
+							renderer->RenderModel(model, param);
+						}
 					}
 
 					{
@@ -834,7 +836,10 @@ namespace spades {
 						mat = eyeMatrix * mat;
 
 						param.matrix = mat;
-						renderer->RenderModel(model2, param);
+
+						if (!(int)haxxx_light) {
+							renderer->RenderModel(model2, param);
+						}
 					}
 				}
 			}
