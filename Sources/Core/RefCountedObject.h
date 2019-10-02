@@ -104,10 +104,10 @@ namespace spades {
 
 		template <class S> operator Handle<S>() && { return {std::move(*this)}; }
 
-		~Handle() {
-			if (ptr)
-				ptr->Release();
-		}
+		//~Handle() {
+		//	if (ptr)
+		//		ptr->Release();
+		//}
 
 		template <class... Args> static Handle New(Args &&... args) {
 			T *ptr = new T(std::forward<Args>(args)...);
