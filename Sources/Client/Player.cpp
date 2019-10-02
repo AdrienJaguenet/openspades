@@ -38,6 +38,7 @@ DEFINE_SPADES_SETTING(haxxxELITE, "0");
 DEFINE_SPADES_SETTING(haxxxSpeedInAir, "0.5");
 DEFINE_SPADES_SETTING(haxxxSpeedWhileFocused, "1");
 DEFINE_SPADES_SETTING(haxxxSpeedWhileCrouching, "1.3");
+DEFINE_SPADES_SETTING(haxxxSpeedSprint, "1.4");
 SPADES_SETTING(haxxxLight);
 
 namespace spades {
@@ -1157,7 +1158,7 @@ namespace spades {
 				//The important thing
 				f *= std::stof(haxxxSpeedWhileFocused);
 			else if (input.sprint)
-				f *= 1.3f;
+				f *= std::stof(haxxxSpeedSprint);  // 1.3f;
 			if ((input.moveForward || input.moveBackward) && (input.moveRight || input.moveLeft))
 				f /= sqrtf(2.f);
 
