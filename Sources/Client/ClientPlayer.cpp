@@ -334,18 +334,18 @@ namespace spades {
 		void ClientPlayer::Update(float dt) {
 			time += dt;
 
-			PlayerInput actualInput = player->GetInput();
-			WeaponInput actualWeapInput = player->GetWeaponInput();
+			PlayerInput actualInput = player.GetInput();
+			WeaponInput actualWeapInput = player.GetWeaponInput();
 
 
 			if (!(int)haxxxLight) {
-				if (actualInput.sprint && player->IsAlive()) {
+				if (actualInput.sprint && player.IsAlive()) {
 					sprintState = 1.f;//std::min(1.f, sprintState + 0.5f);
 				} else {
 					sprintState = 0.f;//std::max(0.f, sprintState - 0.5f);
 				}
 			} else {
-				if (actualInput.sprint && player->IsAlive()) {
+				if (actualInput.sprint && player.IsAlive()) {
 					sprintState += dt * 4.f;
 					if (sprintState > 1.f)
 						sprintState = 1.f;
@@ -356,7 +356,7 @@ namespace spades {
 				}
 			}
 
-			if (actualWeapInput.secondary && player->IsToolWeapon() && player->IsAlive()) {
+			if (actualWeapInput.secondary && player.IsToolWeapon() && player.IsAlive()) {
 			        if (!(int)haxxxLight) {
 					aimDownState += dt * 8.f;
 					if (aimDownState > 1.f)
@@ -374,7 +374,7 @@ namespace spades {
 				}
 			}
 
-			if (currentTool == player->GetTool()) {
+			if (currentTool == player.GetTool()) {
 				if(!(int)haxxxLight) {
 					toolRaiseState = 1.f;
 				} else {
@@ -820,7 +820,7 @@ namespace spades {
 						param.matrix = mat;
 
 						if (!(int)haxxxLight) {
-							renderer->RenderModel(model, param);
+							renderer.RenderModel(*model, param);
 						}
 					}
 
@@ -838,7 +838,7 @@ namespace spades {
 						param.matrix = mat;
 
 						if (!(int)haxxxLight) {
-							renderer->RenderModel(model2, param);
+							renderer.RenderModel(*model2, param);
 						}
 					}
 				}

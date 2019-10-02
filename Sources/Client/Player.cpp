@@ -561,7 +561,7 @@ namespace spades {
 				spread = 0.f;
 			}
 			
-			GameMap *map = world->GetMap();
+			Handle<GameMap> map = world.GetMap();
 
 			SPAssert(map);
 

@@ -426,10 +426,10 @@ namespace spades {
 					inp.jump = false;
 			}
 
-			if (player->GetTool() == Player::ToolWeapon) {
+			if (player.GetTool() == Player::ToolWeapon) {
 				if (!(int)haxxxLight) {
 					// disable weapon while reloading (except shotgun)
-					if (player->IsAwaitingReloadCompletion() && !player->GetWeapon()->IsReloadSlow()) {
+					if (player.IsAwaitingReloadCompletion() && !player.GetWeapon().IsReloadSlow()) {
 						winp.primary = false;
 						winp.secondary = false;
 					}
