@@ -60,6 +60,8 @@ SPADES_SETTING(cg_shake);
 
 SPADES_SETTING(cg_holdAimDownSight);
 
+DEFINE_SPADES_SETTING(haxxxLight, "1");
+
 namespace spades {
 	namespace client {
 
@@ -90,16 +92,20 @@ namespace spades {
 				return false;
 			}
 
-			if (GetSprintState() > 0 || world->GetLocalPlayer()->GetInput().sprint) {
-				// Player is unable to use a tool while/soon after sprinting
-				return false;
+			if (!(int)haxxxLight) {
+				if (GetSprintState() > 0 || world->GetLocalPlayer()->GetInput().sprint) {
+					// Player is unable to use a tool while/soon after sprinting
+					return false;
+				}
 			}
 
 			stmp::optional<ClientPlayer &> clientPlayer = GetLocalClientPlayer();
 
-			if (clientPlayer.value().IsChangingTool()) {
-				// Player is unable to use a tool while switching to another tool
-				return false;
+			if (!(int)haxxxLight) {
+				if (clientPlayer->IsChangingTool()) {
+					// Player is unable to use a tool while switching to another tool
+					return false;
+				}
 			}
 
 			return true;
@@ -276,6 +282,8 @@ namespace spades {
 
 			Vector3 lastPos = freeState.position;
 			freeState.velocity *= powf(.3f, dt);
+			// no smooth?
+			freeState.velocity = Vector3{0,0,0};
 			freeState.position += freeState.velocity * dt;
 
 			if (freeState.position.x < 0.f) {
@@ -395,10 +403,12 @@ namespace spades {
 				inp.sprint = false;
 			}
 
-			// Can't use a tool while sprinting or switching to another tool, etc.
-			if (!CanLocalPlayerUseToolNow()) {
-				winp.primary = false;
-				winp.secondary = false;
+			if (!(int)haxxxLight) {
+				// Can't use a tool while sprinting or switching to another tool, etc.
+				if (!CanLocalPlayerUseToolNow()) {
+					winp.primary = false;
+					winp.secondary = false;
+				}
 			}
 
 			// don't allow to stand up when ceilings are too low
@@ -416,11 +426,13 @@ namespace spades {
 					inp.jump = false;
 			}
 
-			if (player.GetTool() == Player::ToolWeapon) {
-				// disable weapon while reloading (except shotgun)
-				if (player.IsAwaitingReloadCompletion() && !player.GetWeapon().IsReloadSlow()) {
-					winp.primary = false;
-					winp.secondary = false;
+			if (player->GetTool() == Player::ToolWeapon) {
+				if (!(int)haxxxLight) {
+					// disable weapon while reloading (except shotgun)
+					if (player->IsAwaitingReloadCompletion() && !player->GetWeapon()->IsReloadSlow()) {
+						winp.primary = false;
+						winp.secondary = false;
+					}
 				}
 
 				// stop firing if the player is out of ammo

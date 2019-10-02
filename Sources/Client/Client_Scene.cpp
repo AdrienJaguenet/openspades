@@ -40,11 +40,12 @@
 
 #include "NetClient.h"
 
-DEFINE_SPADES_SETTING(cg_fov, "68");
+DEFINE_SPADES_SETTING(cg_fov, "120");
 DEFINE_SPADES_SETTING(cg_thirdperson, "0");
 DEFINE_SPADES_SETTING(cg_manualFocus, "0");
 DEFINE_SPADES_SETTING(cg_depthOfFieldAmount, "1");
-DEFINE_SPADES_SETTING(cg_shake, "1");
+
+SPADES_SETTING(haxxx_animations);
 
 namespace spades {
 	namespace client {
@@ -138,7 +139,7 @@ namespace spades {
 		SceneDefinition Client::CreateSceneDefinition() {
 			SPADES_MARK_FUNCTION();
 
-			int shakeLevel = cg_shake;
+			int shakeLevel = (int)haxxx_animations ? 0 : 1;
 
 			SceneDefinition def;
 			def.time = (unsigned int)(time * 1000.f);
@@ -147,8 +148,8 @@ namespace spades {
 
 			// Limit the range of cg_fov
 			// (note: comparsion with a NaN always results in false)
-			if (!((float)cg_fov < 90.0f)) {
-				cg_fov = 90.0f;
+			if (!((float)cg_fov < 180.0f)) {
+				cg_fov = 180.0f;
 			}
 			if (!((float)cg_fov > 45.0f)) {
 				cg_fov = 45.0f;

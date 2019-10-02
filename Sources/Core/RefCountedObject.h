@@ -104,9 +104,10 @@ namespace spades {
 
 		template <class S> operator Handle<S>() && { return {std::move(*this)}; }
 
+		//THIS PIECE OF SHIT CODE HAS BEEN BREAKING MY BUILD FOR TWO DAYS, FUCK YOU
 		//~Handle() {
-		//	if (ptr)
-		//		ptr->Release();
+			// if (ptr)
+			//	ptr->Release();
 		//}
 
 		template <class... Args> static Handle New(Args &&... args) {

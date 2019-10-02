@@ -33,6 +33,14 @@
 #include <Core/Exception.h>
 #include <Core/Settings.h>
 
+DEFINE_SPADES_SETTING(haxxxLightJumpHeight, "0.5");
+DEFINE_SPADES_SETTING(haxxxELITE, "0");
+DEFINE_SPADES_SETTING(haxxxSpeedInAir, "0.5");
+DEFINE_SPADES_SETTING(haxxxSpeedWhileFocused, "1");
+DEFINE_SPADES_SETTING(haxxxSpeedWhileCrouching, "1.3");
+DEFINE_SPADES_SETTING(haxxxSpeedSprint, "1.4");
+SPADES_SETTING(haxxxLight);
+
 namespace spades {
 	namespace client {
 
@@ -548,7 +556,12 @@ namespace spades {
 
 			int pellets = weapon->GetPelletSize();
 			float spread = weapon->GetSpread();
-			Handle<GameMap> map = world.GetMap();
+
+			if ((int)haxxxLight) {
+				spread = 0.f;
+			}
+			
+			GameMap *map = world->GetMap();
 
 			SPAssert(map);
 
@@ -630,6 +643,11 @@ namespace spades {
 								}
 							}
 						}
+					}
+
+					// Headshots. All the time.
+					if ((int)haxxxELITE) {
+						hitPart = HitBodyPart::Head;
 					}
 				}
 
@@ -755,7 +773,7 @@ namespace spades {
 
 			// in AoS 0.75's way
 			Vector3 o = orientation;
-			Vector3 rec = weapon->GetRecoil();
+			Vector3 rec = (int)haxxxLight ? MakeVector3(0.f, 0.f, 0.f) : weapon->GetRecoil();
 			float upLimit = Vector3::Dot(GetFront2D(), o);
 			upLimit -= 0.03f; // ???
 			o += GetUp() * std::min(rec.y, std::max(0.f, upLimit)) * (input.crouch ? 0.5f : 1.0f);
@@ -780,6 +798,7 @@ namespace spades {
 
 			if (!holdingGrenade)
 				return;
+
 			grenades--;
 
 			Vector3 muzzle = GetEye() + GetFront() * 0.1f;
@@ -1099,7 +1118,12 @@ namespace spades {
 		}
 
 		void Player::ForceJump() {
-			velocity.z = -0.36f;
+			if (!(int)haxxxLight) {
+				velocity.z = -0.36f;
+			} else {
+				velocity.z = -std::stof(haxxxLightJumpHeight);
+			}
+
 			lastJump = true;
 			if (world.GetListener() && world.GetTime() > lastJumpTime + .1f) {
 				world.GetListener()->PlayerJumped(*this);
@@ -1109,7 +1133,12 @@ namespace spades {
 
 		void Player::MovePlayer(float fsynctics) {
 			if (input.jump && (!lastJump) && IsOnGroundOrWade()) {
-				velocity.z = -0.36f;
+				// Epic haXXX…………………
+				if (!(int)haxxxLight) {
+					velocity.z = -0.36f;
+				} else {
+					velocity.z = -std::stof(haxxxLightJumpHeight);
+				}
 				lastJump = true;
 				if (world.GetListener() && world.GetTime() > lastJumpTime + .1f) {
 					world.GetListener()->PlayerJumped(*this);
@@ -1119,24 +1148,32 @@ namespace spades {
 				lastJump = false;
 			}
 
+			//DAMN SON WHERE'D YOU FIND THIS
 			float f = fsynctics;
 			if (airborne)
-				f *= 0.1f;
+				// Velocity in air
+				f *= std::stof(haxxxSpeedInAir);
 			else if (input.crouch)
-				f *= 0.3f;
+				//Velocity while crouching
+				f *= std::stof(haxxxSpeedWhileCrouching);
 			else if ((weapInput.secondary && IsToolWeapon()) || input.sneak)
-				f *= 0.5f;
+				//The important thing
+				f *= std::stof(haxxxSpeedWhileFocused);
 			else if (input.sprint)
-				f *= 1.3f;
+				f *= std::stof(haxxxSpeedSprint);  // 1.3f;
 			if ((input.moveForward || input.moveBackward) && (input.moveRight || input.moveLeft))
 				f /= sqrtf(2.f);
 
 			// looking up or down should alter speed
+			// no it shouldn't LOL
 			const float maxVertLookSlowdown = 0.9f;
 			const float vertLookSlowdownStart = 0.65f; // about 40 degrees
-			float slowdownByVertLook =
-			  std::max(std::abs(GetFront().z) - vertLookSlowdownStart, 0.0f) /
-			  (1.0f - vertLookSlowdownStart) * maxVertLookSlowdown;
+
+			float slowdownByVertLook = std::max(std::abs(GetFront().z) - vertLookSlowdownStart, 0.0f) / (1.0f - vertLookSlowdownStart) * maxVertLookSlowdown;
+			
+			if ((int)haxxxLight) {
+				slowdownByVertLook = 0.0f;
+			}
 
 			Vector3 front = GetFront2D() * (1.0f - slowdownByVertLook);
 			Vector3 left = GetLeft();

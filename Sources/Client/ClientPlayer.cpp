@@ -56,6 +56,8 @@ DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponZ, "0");
 
+SPADES_SETTING(haxxxLight);
+
 namespace spades {
 	namespace client {
 
@@ -332,23 +334,30 @@ namespace spades {
 		void ClientPlayer::Update(float dt) {
 			time += dt;
 
-			PlayerInput actualInput = player.GetInput();
-			WeaponInput actualWeapInput = player.GetWeaponInput();
-			if (actualInput.sprint && player.IsAlive()) {
-				sprintState += dt * 4.f;
-				if (sprintState > 1.f)
-					sprintState = 1.f;
+			PlayerInput actualInput = player->GetInput();
+			WeaponInput actualWeapInput = player->GetWeaponInput();
+
+
+			if (!(int)haxxxLight) {
+				if (actualInput.sprint && player->IsAlive()) {
+					sprintState = 1.f;//std::min(1.f, sprintState + 0.5f);
+				} else {
+					sprintState = 0.f;//std::max(0.f, sprintState - 0.5f);
+				}
 			} else {
-				sprintState -= dt * 3.f;
-				if (sprintState < 0.f)
-					sprintState = 0.f;
+				if (actualInput.sprint && player->IsAlive()) {
+					sprintState += dt * 4.f;
+					if (sprintState > 1.f)
+						sprintState = 1.f;
+				} else {
+					sprintState -= dt * 3.f;
+					if (sprintState < 0.f)
+						sprintState = 0.f;
+				}
 			}
 
-			if (actualWeapInput.secondary && player.IsToolWeapon() && player.IsAlive()) {
-				// This is the only animation that can be turned off
-				// here; others affect the gameplay directly and
-				// turning them off would be considered cheating
-				if (cg_animations) {
+			if (actualWeapInput.secondary && player->IsToolWeapon() && player->IsAlive()) {
+			        if (!(int)haxxxLight) {
 					aimDownState += dt * 8.f;
 					if (aimDownState > 1.f)
 						aimDownState = 1.f;
@@ -356,7 +365,7 @@ namespace spades {
 					aimDownState = 1.f;
 				}
 			} else {
-				if (cg_animations) {
+			        if (!(int)haxxxLight) {
 					aimDownState -= dt * 3.f;
 					if (aimDownState < 0.f)
 						aimDownState = 0.f;
@@ -365,15 +374,24 @@ namespace spades {
 				}
 			}
 
-			if (currentTool == player.GetTool()) {
-				toolRaiseState += dt * 4.f;
-				if (toolRaiseState > 1.f)
+			if (currentTool == player->GetTool()) {
+				if(!(int)haxxxLight) {
 					toolRaiseState = 1.f;
-				if (toolRaiseState < 0.f)
-					toolRaiseState = 0.f;
+				} else {
+					toolRaiseState += dt * 4.f;
+					if (toolRaiseState > 1.f)
+						toolRaiseState = 1.f;
+					if (toolRaiseState < 0.f)
+						toolRaiseState = 0.f;
+				}
 			} else {
-				toolRaiseState -= dt * 4.f;
-				if (toolRaiseState < 0.f) {
+				if (!(int)haxxxLight) {
+					toolRaiseState -= dt * 4.f;
+				} else {
+			  		toolRaiseState = 0.f;
+			  	}
+				
+				if (toolRaiseState <= 0.f) {
 					toolRaiseState = 0.f;
 					currentTool = player.GetTool();
 
@@ -800,7 +818,10 @@ namespace spades {
 						mat = eyeMatrix * mat;
 
 						param.matrix = mat;
-						renderer.RenderModel(*model, param);
+
+						if (!(int)haxxxLight) {
+							renderer->RenderModel(model, param);
+						}
 					}
 
 					{
@@ -815,7 +836,10 @@ namespace spades {
 						mat = eyeMatrix * mat;
 
 						param.matrix = mat;
-						renderer.RenderModel(*model2, param);
+
+						if (!(int)haxxxLight) {
+							renderer->RenderModel(model2, param);
+						}
 					}
 				}
 			}
