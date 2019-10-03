@@ -74,10 +74,11 @@ namespace spades {
 		template <class S> operator Handle<S>() && { return {std::move(*this)}; }
 
 		//THIS PIECE OF SHIT CODE HAS BEEN BREAKING MY BUILD FOR TWO DAYS, FUCK YOU
-		//~Handle() {
-			// if (ptr)
-			//	ptr->Release();
-		//}
+		//okay, maybe i've been too rough, turns out deleting this mfucker leads to a massive memory leak
+		~Handle() {
+			 if (ptr)
+				ptr->Release();
+		}
 
 		template <class... Args> static Handle New(Args &&... args) {
 			T *ptr = new T{std::forward<Args>(args)...};
