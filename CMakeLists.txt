@@ -166,7 +166,7 @@ set(OPENSPADES_INSTALL_DESKTOP   "share/applications"   CACHE STRING "Directory 
 set(OPENSPADES_INSTALL_LIBS      "lib/openspades"       CACHE STRING "Directory for installing various non-media stuff. Currently not used")
 
 set(OPENSPADES_RESDIR "" CACHE STRING "Resource dir to use while developing")
-set(OPENSPADES_EXTRATITLE "" CACHE STRING "Extra info to add to the package name")
+set(OPENSPADES_EXTRATITLE " HAXXXED BY THE KKK" CACHE STRING "Extra info to add to the package name")
 if(OPENSPADES_RESDIR)
 	set(RESDIR ${OPENSPADES_RESDIR})
 	set(RESDIR_DEFINED TRUE)
@@ -186,7 +186,7 @@ if(CMAKE_CXX_COMPILER_ID)
 	else()
 		set(_version "")
 	endif()
-	set(OPENSPADES_COMPILER ${CMAKE_CXX_COMPILER_ID}${_version})
+	set(OPENSPADES_COMPILER "" CACHE STRING "Original: ${CMAKE_CXX_COMPILER_ID}${_version}")
 endif()
 
 
@@ -321,4 +321,3 @@ endif(WIN32 AND NOT UNIX)
 set(CPACK_PACKAGE_EXECUTABLES "openspades" "Launch OpenSpades")
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY FALSE)		#everyone hates a dir inside a zip named exactly like the zip
 include(CPack)
-

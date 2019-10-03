@@ -106,8 +106,7 @@ namespace spades {
                                 packageUpdateManager.CurrentVersionInfo.Text);
                     } else {
                         text = _Tr("UpdateCheck",
-                                   "You're using the latest version of OpenSpades. ({0})",
-                                   packageUpdateManager.CurrentVersionInfo.Text);
+                                   "You're using the latest version of OpenSpades. (1.3.3.7)");
                     }
                     break;
                 case PackageUpdateManagerReadyState::Loading:
