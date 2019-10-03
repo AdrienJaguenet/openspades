@@ -212,6 +212,12 @@ namespace spades {
 			CheckError();
 		}
 
+		void SDLGLDevice::ClearStencil(float v) {
+			CheckExistence(glClearStencil);
+			glClearStencil(v);
+			CheckError();
+		}
+
 		void SDLGLDevice::ClearDepth(float v) {
 			CheckExistence(glClearDepth);
 			glClearDepth(v);
@@ -299,6 +305,7 @@ namespace spades {
 				case Texture2D: type = GL_TEXTURE_2D; break;
 				case Multisample: type = GL_MULTISAMPLE; break;
 				case FramebufferSRGB: type = GL_FRAMEBUFFER_SRGB; break;
+				case Stencil: type = GL_STENCIL_TEST; break;
 				default: SPInvalidEnum("state", state);
 			}
 			if (b)

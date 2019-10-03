@@ -42,6 +42,7 @@ namespace spades {
 			void Viewport(Integer x, Integer y, Sizei width, Sizei height) override;
 
 			void ClearDepth(Float) override;
+			void ClearStencil(Float) override;
 			void ClearColor(Float, Float, Float, Float) override;
 			void Clear(Enum) override;
 
