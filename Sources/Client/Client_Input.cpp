@@ -84,7 +84,20 @@ DEFINE_SPADES_SETTING(cg_switchToolByWheel, "1");
 DEFINE_SPADES_SETTING(cg_debugCorpse, "0");
 DEFINE_SPADES_SETTING(cg_alerts, "1");
 
+DEFINE_SPADES_SETTING(haxxxTowerInc_X, "num7");
+DEFINE_SPADES_SETTING(haxxxTowerDec_X, "num9");
+DEFINE_SPADES_SETTING(haxxxTowerInc_Y, "num4");
+DEFINE_SPADES_SETTING(haxxxTowerDec_Y, "num6");
+DEFINE_SPADES_SETTING(haxxxTowerInc_Z, "num1");
+DEFINE_SPADES_SETTING(haxxxTowerDec_Z, "num3");
+DEFINE_SPADES_SETTING(haxxxTowerToggle, "num5");
+DEFINE_SPADES_SETTING(haxxxTowerReset, "num0");
+
 SPADES_SETTING(cg_manualFocus);
+SPADES_SETTING(haxxxBigassTower);
+SPADES_SETTING(haxxxBigassTower_X);
+SPADES_SETTING(haxxxBigassTower_Y);
+SPADES_SETTING(haxxxBigassTower_Z);
 DEFINE_SPADES_SETTING(cg_keyAutoFocus, "MiddleMouseButton");
 
 namespace spades {
@@ -572,6 +585,28 @@ namespace spades {
 						audioDevice->PlayLocal(chunk, AudioParam());
 					} else if (CheckKey(cg_keyAutoFocus, name) && down && (int)cg_manualFocus) {
 						autoFocusEnabled = true;
+					} else if (CheckKey(haxxxTowerInc_X, name) && down && haxxxBigassTower){
+						haxxxBigassTower_X = std::stoi(haxxxBigassTower_X) + 1;
+					} else if (CheckKey(haxxxTowerDec_X, name) && down && haxxxBigassTower){
+						haxxxBigassTower_X = std::stoi(haxxxBigassTower_X) - 1;
+					} else if (CheckKey(haxxxTowerInc_Y, name) && down && haxxxBigassTower){
+						haxxxBigassTower_Y = std::stoi(haxxxBigassTower_Y) + 1;
+					} else if (CheckKey(haxxxTowerDec_Y, name) && down && haxxxBigassTower){
+						haxxxBigassTower_Y = std::stoi(haxxxBigassTower_Y) - 1;
+					} else if (CheckKey(haxxxTowerInc_Z, name) && down && haxxxBigassTower){
+						haxxxBigassTower_Z = std::stoi(haxxxBigassTower_Z) + 1;
+					} else if (CheckKey(haxxxTowerDec_Z, name) && down && haxxxBigassTower){
+						haxxxBigassTower_Z = std::stoi(haxxxBigassTower_Z) - 1;
+					} else if (CheckKey(haxxxTowerToggle, name) && down){
+						if (haxxxBigassTower) {
+							haxxxBigassTower = 0;
+						} else {
+							haxxxBigassTower = 1;
+						}
+					} else if (CheckKey(haxxxTowerReset, name) && down){
+						haxxxBigassTower_X = 0;
+						haxxxBigassTower_Y = 0;
+						haxxxBigassTower_Z = 0;
 					} else if (down) {
 						bool rev = (int)cg_switchToolByWheel > 0;
 						if (name == (rev ? "WheelDown" : "WheelUp")) {

@@ -47,6 +47,9 @@ DEFINE_SPADES_SETTING(cg_depthOfFieldAmount, "1");
 
 SPADES_SETTING(haxxx_animations);
 SPADES_SETTING(haxxxBigassTower);
+SPADES_SETTING(haxxxBigassTower_X);
+SPADES_SETTING(haxxxBigassTower_Y);
+SPADES_SETTING(haxxxBigassTower_Z);
 
 namespace spades {
 	namespace client {
@@ -641,11 +644,11 @@ namespace spades {
 						std::vector<IntVector3> blocks;
 						if (p->IsBlockCursorDragging()) {
 							/* haXXX: show that we're going to build a big ass tower */
-							if (std::stoi(haxxxBigassTower)) {
+							if (haxxxBigassTower) {
 								blocks = world->CubeLine(p->GetBlockCursorPos(),
-										IntVector3(p->GetBlockCursorPos().x,
-										           p->GetBlockCursorPos().y,
-										           p->GetBlockCursorPos().z - std::stoi(haxxxBigassTower)),
+										IntVector3(p->GetBlockCursorPos().x + std::stoi(haxxxBigassTower_X),
+										           p->GetBlockCursorPos().y + std::stoi(haxxxBigassTower_Y),
+										           p->GetBlockCursorPos().z + std::stoi(haxxxBigassTower_Z)),
 										256);
 							} else {
 								blocks = world->CubeLine(p->GetBlockCursorDragPos(),

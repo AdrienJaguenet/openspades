@@ -102,6 +102,16 @@ namespace spades {
 				case SDLK_DELETE: return "Delete";
 				case SDLK_RETURN: return "Enter";
 				case SDLK_SLASH: return "/";
+				case SDLK_KP_1: return "num1";
+				case SDLK_KP_2: return "num2";
+				case SDLK_KP_3: return "num3";
+				case SDLK_KP_4: return "num4";
+				case SDLK_KP_5: return "num5";
+				case SDLK_KP_6: return "num6";
+				case SDLK_KP_7: return "num7";
+				case SDLK_KP_8: return "num8";
+				case SDLK_KP_9: return "num9";
+				case SDLK_KP_0: return "num0";
 				default: return std::string(SDL_GetScancodeName(k.scancode));
 			}
 		}

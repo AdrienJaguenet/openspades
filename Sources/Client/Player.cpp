@@ -40,6 +40,9 @@ DEFINE_SPADES_SETTING(haxxxSpeedWhileFocused, "1");
 DEFINE_SPADES_SETTING(haxxxSpeedWhileCrouching, "1.3");
 DEFINE_SPADES_SETTING(haxxxSpeedSprint, "1.4");
 DEFINE_SPADES_SETTING(haxxxBigassTower, "0");
+DEFINE_SPADES_SETTING(haxxxBigassTower_X, "0");
+DEFINE_SPADES_SETTING(haxxxBigassTower_Y, "0");
+DEFINE_SPADES_SETTING(haxxxBigassTower_Z, "0");
 SPADES_SETTING(haxxxLight);
 
 namespace spades {
@@ -200,12 +203,12 @@ namespace spades {
 							if (IsBlockCursorActive()) {
 								/* haXXX: build a big ass tower */
 								if (std::stoi(haxxxBigassTower) > 0) {
-									blockCursorDragPos = IntVector3(blockCursorPos.x,
-											                        blockCursorPos.y,
-																	blockCursorPos.z - std::stoi(haxxxBigassTower));
+									blockCursorDragPos = IntVector3(blockCursorPos.x + std::stoi(haxxxBigassTower_X),
+											                        blockCursorPos.y + std::stoi(haxxxBigassTower_Y),
+																	blockCursorPos.z + std::stoi(haxxxBigassTower_Z));
 								}
 								std::vector<IntVector3> blocks =
-								  GetWorld()->CubeLine(blockCursorPos, blockCursorDragPos, 256);
+								  GetWorld()->CubeLine(blockCursorDragPos, blockCursorPos, 256);
 								if ((int)blocks.size() <= blockStocks) {
 									if (listener && this == world->GetLocalPlayer())
 										listener->LocalPlayerCreatedLineBlock(blockCursorDragPos,
