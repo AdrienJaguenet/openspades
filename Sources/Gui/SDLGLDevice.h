@@ -68,6 +68,7 @@ namespace spades {
 			void BlendColor(Float r, Float g, Float b, Float a) override;
 			void DepthFunc(Enum) override;
 			void LineWidth(Float) override;
+			void StencilFunc(Enum func, int ref, int mask) override;
 
 			UInteger GenBuffer() override;
 			void DeleteBuffer(UInteger) override;

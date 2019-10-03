@@ -438,6 +438,22 @@ namespace spades {
 			CheckError();
 		}
 
+		void SDLGLDevice::StencilFunc(Enum func, int ref, int mask) {
+			CheckExistence(glStencilFunc);
+			switch (func) {
+				case Never: glStencilFunc(GL_NEVER, ref, mask); break;
+				case Always: glStencilFunc(GL_ALWAYS, ref, mask); break;
+				case Less: glStencilFunc(GL_LESS, ref, mask); break;
+				case LessOrEqual: glStencilFunc(GL_LEQUAL, ref, mask); break;
+				case Equal: glStencilFunc(GL_EQUAL, ref, mask); break;
+				case Greater: glStencilFunc(GL_GREATER, ref, mask); break;
+				case GreaterOrEqual: glStencilFunc(GL_GEQUAL, ref, mask); break;
+				case NotEqual: glStencilFunc(GL_NOTEQUAL, ref, mask); break;
+				default: SPInvalidEnum("func", func);
+			}
+			CheckError();
+		}
+
 		IGLDevice::UInteger SDLGLDevice::GenBuffer() {
 			SPADES_MARK_FUNCTION_DEBUG();
 			GLuint i = 0;
