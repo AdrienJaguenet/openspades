@@ -270,6 +270,7 @@ namespace spades {
 			virtual void ClearColor(Float, Float, Float, Float) = 0;
 			virtual void Clear(Enum) = 0;
 
+			virtual void StencilMask(bool) = 0;
 			virtual void DepthMask(bool) = 0;
 			virtual void ColorMask(bool r, bool g, bool b, bool a) = 0;
 

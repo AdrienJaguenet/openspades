@@ -272,6 +272,12 @@ namespace spades {
 			CheckError();
 		}
 
+		void SDLGLDevice::StencilMask(bool b) {
+			CheckExistence(glStencilMask);
+			glStencilMask(b ? 0xFF : 0x00);
+			CheckError();
+		}
+
 		void SDLGLDevice::DepthMask(bool b) {
 			CheckExistence(glDepthMask);
 			glDepthMask(b ? GL_TRUE : GL_FALSE);

@@ -49,6 +49,7 @@ namespace spades {
 			void Finish() override;
 			void Flush() override;
 
+			void StencilMask(bool) override;
 			void DepthMask(bool) override;
 			void ColorMask(bool r, bool g, bool b, bool a) override;
 
