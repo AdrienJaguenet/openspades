@@ -51,6 +51,8 @@ namespace spades {
 			virtual void RenderDynamicLightPass(std::vector<client::ModelRenderParam> params,
 			                                    std::vector<GLDynamicLight> lights) = 0;
 
+			/** Renders an outline using the stencil buffer (use is conditional) **/
+			virtual void RenderUpscaledMonochrome(std::vector<client::ModelRenderParam> params) = 0;
 		private:
 			// members used when rendering by GLModelRenderer
 			int renderId;

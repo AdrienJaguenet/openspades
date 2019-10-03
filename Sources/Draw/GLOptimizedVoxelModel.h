@@ -95,6 +95,7 @@ namespace spades {
 
 			void RenderDynamicLightPass(std::vector<client::ModelRenderParam> params,
 			                            std::vector<GLDynamicLight> lights) override;
+			void RenderUpscaledMonochrome(std::vector<client::ModelRenderParam> params) override {}
 
 			AABB3 GetBoundingBox() override { return boundingBox; }
 		};

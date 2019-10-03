@@ -603,5 +603,116 @@ namespace spades {
 
 			device->ActiveTexture(0);
 		}
+
+		void GLVoxelModel::RenderUpscaledMonochrome(std::vector<client::ModelRenderParam> params)
+		{
+			SPADES_MARK_FUNCTION();
+
+			device->ActiveTexture(0);
+			aoImage->Bind(IGLDevice::Texture2D);
+			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                     IGLDevice::Linear);
+
+			device->Enable(IGLDevice::CullFace, true);
+			device->Enable(IGLDevice::DepthTest, true);
+
+			program->Use();
+
+			static GLShadowShader shadowShader;
+			shadowShader(renderer, program, 1);
+
+			static GLProgramUniform modelOrigin("modelOrigin");
+			modelOrigin(program);
+			modelOrigin.SetValue(origin.x, origin.y, origin.z);
+
+			static GLProgramUniform viewOriginVector("viewOriginVector");
+			viewOriginVector(program);
+			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
+
+			// setup attributes
+			static GLProgramAttribute positionAttribute("positionAttribute");
+			static GLProgramAttribute colorAttribute("colorAttribute");
+			static GLProgramAttribute normalAttribute("normalAttribute");
+
+			positionAttribute(program);
+			colorAttribute(program);
+			normalAttribute(program);
+
+			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
+			                            sizeof(Vertex), (void *)0);
+			device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::UnsignedByte, true,
+			                            sizeof(Vertex), (void *)8);
+			device->VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
+			                            sizeof(Vertex), (void *)12);
+			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+
+			device->EnableVertexAttribArray(positionAttribute(), true);
+			device->EnableVertexAttribArray(colorAttribute(), true);
+			device->EnableVertexAttribArray(normalAttribute(), true);
+
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
+
+			for (size_t i = 0; i < params.size(); i++) {
+				const client::ModelRenderParam &param = params[i];
+
+				// frustrum cull
+				float rad = radius;
+				rad *= param.matrix.GetAxis(0).GetLength();
+				if (!renderer->SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
+					continue;
+				}
+
+				static GLProgramUniform customColor("customColor");
+				customColor(program);
+				customColor.SetValue(param.customColor.x, param.customColor.y, param.customColor.z);
+
+				Matrix4 modelMatrix = param.matrix;
+				static GLProgramUniform projectionViewModelMatrix("projectionViewModelMatrix");
+				projectionViewModelMatrix(program);
+				projectionViewModelMatrix.SetValue(renderer->GetProjectionViewMatrix() *
+				                                   modelMatrix);
+
+				static GLProgramUniform viewModelMatrix("viewModelMatrix");
+				viewModelMatrix(program);
+				viewModelMatrix.SetValue(renderer->GetViewMatrix() * modelMatrix);
+
+				static GLProgramUniform modelMatrixU("modelMatrix");
+				modelMatrixU(program);
+				modelMatrixU.SetValue(modelMatrix);
+
+				modelMatrix.m[12] = 0.f;
+				modelMatrix.m[13] = 0.f;
+				modelMatrix.m[14] = 0.f;
+				static GLProgramUniform modelNormalMatrix("modelNormalMatrix");
+				modelNormalMatrix(program);
+				modelNormalMatrix.SetValue(modelMatrix);
+
+				static GLProgramUniform modelOpacity("modelOpacity");
+				modelOpacity(program);
+				modelOpacity.SetValue(param.opacity);
+
+				if (param.depthHack) {
+					device->DepthRange(0.f, 0.1f);
+				}
+
+				device->DrawElements(IGLDevice::Triangles, numIndices, IGLDevice::UnsignedInt,
+				                     (void *)0);
+				if (param.depthHack) {
+					device->DepthRange(0.f, 1.f);
+				}
+			}
+
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
+
+			device->EnableVertexAttribArray(positionAttribute(), false);
+			device->EnableVertexAttribArray(colorAttribute(), false);
+			device->EnableVertexAttribArray(normalAttribute(), false);
+
+			device->ActiveTexture(0);
+			device->BindTexture(IGLDevice::Texture2D, 0);
+
+		}
 	}
 }
