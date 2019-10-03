@@ -70,6 +70,8 @@ namespace spades {
 			void LineWidth(Float) override;
 			void StencilFunc(Enum func, int ref, int mask) override;
 
+			void StencilOp(Enum sfail, Enum dpfail, Enum dppass) override;
+
 			UInteger GenBuffer() override;
 			void DeleteBuffer(UInteger) override;
 			void BindBuffer(Enum, UInteger) override;
@@ -201,6 +203,7 @@ namespace spades {
 			static GLenum parseType(Enum);
 			static GLenum parseFramebufferTarget(Enum);
 			static GLenum parseRenderbufferTarget(Enum);
+			static GLenum parseStencilOp(Enum);
 		};
 	}
 }

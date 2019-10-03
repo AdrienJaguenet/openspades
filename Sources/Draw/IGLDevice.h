@@ -49,6 +49,16 @@ namespace spades {
 				UnsignedShort1555Rev,
 				UnsignedInt2101010Rev,
 
+				// stencil operations
+				Keep,
+				// Zero already defined for blend function
+				Replace,
+				Increment,
+				IncrementWrap,
+				Decrement,
+				DecrementWrap,
+				Invert,
+
 				// Front face
 				CW,
 				CCW,
@@ -293,6 +303,8 @@ namespace spades {
 			virtual void DepthFunc(Enum) = 0;
 			virtual void LineWidth(Float) = 0;
 			virtual void StencilFunc(Enum func, int ref, int mask) = 0;
+
+			virtual void StencilOp(Enum sfail, Enum dpfail, Enum dppass) = 0;
 
 			virtual UInteger GenBuffer() = 0;
 			virtual void DeleteBuffer(UInteger) = 0;

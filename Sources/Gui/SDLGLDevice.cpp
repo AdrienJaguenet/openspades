@@ -454,6 +454,27 @@ namespace spades {
 			CheckError();
 		}
 
+		GLenum SDLGLDevice::parseStencilOp(Enum op) {
+			SPADES_MARK_FUNCTION();
+			switch (op) {
+				case Keep: return GL_KEEP;
+				case Zero: return GL_ZERO;
+				case Replace: return GL_REPLACE;
+				case Increment: return GL_INCR;
+				case IncrementWrap: return GL_INCR_WRAP;
+				case Decrement: return GL_DECR;
+				case DecrementWrap: return GL_DECR_WRAP;
+				case Invert: return GL_INVERT;
+				default: SPInvalidEnum("op", op);
+			}
+		}
+
+		void SDLGLDevice::StencilOp(Enum sfail, Enum dpfail, Enum dppass) {
+			CheckExistence(glStencilFunc);
+			glStencilOp(parseStencilOp(sfail), parseStencilOp(dpfail), parseStencilOp(dppass));
+			CheckError();
+		}
+
 		IGLDevice::UInteger SDLGLDevice::GenBuffer() {
 			SPADES_MARK_FUNCTION_DEBUG();
 			GLuint i = 0;
