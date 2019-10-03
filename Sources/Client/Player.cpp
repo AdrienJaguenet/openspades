@@ -39,6 +39,7 @@ DEFINE_SPADES_SETTING(haxxxSpeedInAir, "0.5");
 DEFINE_SPADES_SETTING(haxxxSpeedWhileFocused, "1");
 DEFINE_SPADES_SETTING(haxxxSpeedWhileCrouching, "1.3");
 DEFINE_SPADES_SETTING(haxxxSpeedSprint, "1.4");
+DEFINE_SPADES_SETTING(haxxxBigassTower, "0");
 SPADES_SETTING(haxxxLight);
 
 namespace spades {
@@ -197,12 +198,18 @@ namespace spades {
 					} else {
 						if (IsBlockCursorDragging()) {
 							if (IsBlockCursorActive()) {
+								/* haXXX: build a big ass tower */
+								if (std::stoi(haxxxBigassTower) > 0) {
+									blockCursorDragPos = IntVector3(blockCursorPos.x,
+											                        blockCursorPos.y,
+																	blockCursorPos.z - std::stoi(haxxxBigassTower));
+								}
 								std::vector<IntVector3> blocks =
-								  GetWorld()->CubeLine(blockCursorDragPos, blockCursorPos, 256);
+								  GetWorld()->CubeLine(blockCursorPos, blockCursorDragPos, 256);
 								if ((int)blocks.size() <= blockStocks) {
 									if (listener && this == world->GetLocalPlayer())
 										listener->LocalPlayerCreatedLineBlock(blockCursorDragPos,
-										                                      blockCursorPos);
+																			  blockCursorPos);
 									// blockStocks -= blocks.size(); decrease when created
 								} else {
 									// cannot build; insufficient blocks.
@@ -566,7 +573,7 @@ namespace spades {
 			if ((int)haxxxLight) {
 				spread = 0.f;
 			}
-			
+
 			GameMap *map = world->GetMap();
 
 			if (weapInput.secondary) {
@@ -1168,7 +1175,7 @@ namespace spades {
 			const float vertLookSlowdownStart = 0.65f; // about 40 degrees
 
 			float slowdownByVertLook = std::max(std::abs(GetFront().z) - vertLookSlowdownStart, 0.0f) / (1.0f - vertLookSlowdownStart) * maxVertLookSlowdown;
-			
+
 			if ((int)haxxxLight) {
 				slowdownByVertLook = 0.0f;
 			}
