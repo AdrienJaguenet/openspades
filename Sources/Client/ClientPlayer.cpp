@@ -389,7 +389,7 @@ namespace spades {
 				} else {
 			  		toolRaiseState = 0.f;
 			  	}
-				
+
 				if (toolRaiseState <= 0.f) {
 					toolRaiseState = 0.f;
 					currentTool = player->GetTool();
@@ -1104,7 +1104,7 @@ namespace spades {
 		}
 
 		bool ClientPlayer::ShouldRenderInThirdPersonView() {
-			// The player from whom's perspective the game is
+			// The player in whose perspective the game is drawn
 			return !IsFirstPerson(client->GetCameraMode()) || player != &client->GetCameraTargetPlayer();
 		}
 
