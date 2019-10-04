@@ -1266,6 +1266,9 @@ namespace spades {
 				case BuildFailureReason::InvalidPosition:
 					ShowAlert(_Tr("Client", "You cannot place a block there."), AlertType::Error);
 					break;
+				case BuildFailureReason::NoNeighbors:
+					ShowAlert("HaXXX tower would fail server-side due to a lack of neighbors on its far side", AlertType::Error);
+					break;
 			}
 		}
 	}

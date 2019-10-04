@@ -72,6 +72,21 @@ namespace spades {
 				SPAssert(z < Depth());
 				return ((solidMap[x][y] >> (uint64_t)z) & 1ULL) != 0;
 			}
+			
+			inline bool HasNeighbors(int x, int y, int z) {
+				SPAssert(x >= 0);
+				SPAssert(x < Width());
+				SPAssert(y >= 0);
+				SPAssert(y < Height());
+				SPAssert(z >= 0);
+				SPAssert(z < Depth());
+				return IsSolid(x, y, z + 1)
+				    || IsSolid(x, y, z - 1)
+				    || IsSolid(x, y + 1, z)
+				    || IsSolid(x, y - 1, z)
+				    || IsSolid(x + 1, y, z)
+				    || IsSolid(x - 1, y, z);
+			}
 
 			/** @return 0xHHBBGGRR where HH is health (up to 100) */
 			inline uint32_t GetColor(int x, int y, int z) {

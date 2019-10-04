@@ -202,26 +202,32 @@ namespace spades {
 						if (IsBlockCursorDragging()) {
 							if (IsBlockCursorActive()) {
 								/* haXXX: build a big ass tower */
-								if (std::stoi(haxxxBigassTower) > 0) {
+								if (haxxxBigassTower) {
 									blockCursorDragPos = IntVector3(blockCursorPos.x + std::stoi(haxxxBigassTower_X),
 											                        blockCursorPos.y + std::stoi(haxxxBigassTower_Y),
 																	blockCursorPos.z + std::stoi(haxxxBigassTower_Z));
 								}
-								std::vector<IntVector3> blocks =
-								  GetWorld()->CubeLine(blockCursorDragPos, blockCursorPos, 256);
-								if ((int)blocks.size() <= blockStocks) {
-									if (listener && this == world->GetLocalPlayer())
-										listener->LocalPlayerCreatedLineBlock(blockCursorDragPos,
-																			  blockCursorPos);
-									// blockStocks -= blocks.size(); decrease when created
+								/* haXXX: the first block will be checked by the server, cancel building if it does not have neighbours
+								   TODO: if the far block is within building distance, we can just revert the sending order */
+								if (! world->GetMap()->HasNeighbors(blockCursorDragPos.x, blockCursorDragPos.y, blockCursorDragPos.z)) {
+									listener->LocalPlayerBuildError(BuildFailureReason::NoNeighbors);
 								} else {
-									// cannot build; insufficient blocks.
-									if (listener && this == world->GetLocalPlayer()) {
-										listener->LocalPlayerBuildError(
-										  BuildFailureReason::InsufficientBlocks);
+									std::vector<IntVector3> blocks =
+									  GetWorld()->CubeLine(blockCursorDragPos, blockCursorPos, 256);
+									if ((int)blocks.size() <= blockStocks) {
+										if (listener && this == world->GetLocalPlayer())
+											listener->LocalPlayerCreatedLineBlock(blockCursorDragPos,
+																				  blockCursorPos);
+										// blockStocks -= blocks.size(); decrease when created
+									} else {
+										// cannot build; insufficient blocks.
+										if (listener && this == world->GetLocalPlayer()) {
+											listener->LocalPlayerBuildError(
+											  BuildFailureReason::InsufficientBlocks);
+										}
 									}
+									nextBlockTime = world->GetTime() + GetToolSecondaryDelay();
 								}
-								nextBlockTime = world->GetTime() + GetToolSecondaryDelay();
 							} else {
 								// cannot build; invalid position.
 								if (listener && this == world->GetLocalPlayer()) {

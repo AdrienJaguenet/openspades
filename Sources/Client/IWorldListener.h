@@ -28,7 +28,7 @@ namespace spades {
 		class Player;
 		class Grenade;
 
-		enum class BuildFailureReason { InsufficientBlocks, InvalidPosition };
+		enum class BuildFailureReason { InsufficientBlocks, InvalidPosition, NoNeighbors };
 
 		class IWorldListener {
 		public:
