@@ -587,26 +587,35 @@ namespace spades {
 						autoFocusEnabled = true;
 					} else if (CheckKey(haxxxTowerInc_X, name) && down && haxxxBigassTower){
 						haxxxBigassTower_X = std::stoi(haxxxBigassTower_X) + 1;
+						ShowAlert("Bigass tower X axis set to " + std::string(haxxxBigassTower_X), AlertType::Notice);
 					} else if (CheckKey(haxxxTowerDec_X, name) && down && haxxxBigassTower){
 						haxxxBigassTower_X = std::stoi(haxxxBigassTower_X) - 1;
+						ShowAlert("Bigass tower X axis set to " + std::string(haxxxBigassTower_X), AlertType::Notice);
 					} else if (CheckKey(haxxxTowerInc_Y, name) && down && haxxxBigassTower){
 						haxxxBigassTower_Y = std::stoi(haxxxBigassTower_Y) + 1;
+						ShowAlert("Bigass tower Y axis set to " + std::string(haxxxBigassTower_Y), AlertType::Notice);
 					} else if (CheckKey(haxxxTowerDec_Y, name) && down && haxxxBigassTower){
 						haxxxBigassTower_Y = std::stoi(haxxxBigassTower_Y) - 1;
+						ShowAlert("Bigass tower Y axis set to " + std::string(haxxxBigassTower_Y), AlertType::Notice);
 					} else if (CheckKey(haxxxTowerInc_Z, name) && down && haxxxBigassTower){
 						haxxxBigassTower_Z = std::stoi(haxxxBigassTower_Z) + 1;
+						ShowAlert("Bigass tower Z axis set to " + std::string(haxxxBigassTower_Z), AlertType::Notice);
 					} else if (CheckKey(haxxxTowerDec_Z, name) && down && haxxxBigassTower){
 						haxxxBigassTower_Z = std::stoi(haxxxBigassTower_Z) - 1;
+						ShowAlert("Bigass tower Z axis set to " + std::string(haxxxBigassTower_Z), AlertType::Notice);
 					} else if (CheckKey(haxxxTowerToggle, name) && down){
 						if (haxxxBigassTower) {
 							haxxxBigassTower = 0;
+							ShowAlert("Bigass tower mode: disabled", AlertType::Notice);
 						} else {
 							haxxxBigassTower = 1;
+							ShowAlert("Bigass tower mode: enabled", AlertType::Notice);
 						}
 					} else if (CheckKey(haxxxTowerReset, name) && down){
 						haxxxBigassTower_X = 0;
 						haxxxBigassTower_Y = 0;
 						haxxxBigassTower_Z = 0;
+							ShowAlert("Bigass tower values reset", AlertType::Notice);
 					} else if (down) {
 						bool rev = (int)cg_switchToolByWheel > 0;
 						if (name == (rev ? "WheelDown" : "WheelUp")) {

@@ -697,9 +697,7 @@ namespace spades {
 			Vector2 textSize = font->Measure(alertContents);
 			Vector2 contentsSize = textSize;
 			contentsSize.y = std::max(contentsSize.y, 16.f);
-			if (alertType != AlertType::Notice) {
-				contentsSize.x += 22.f;
-			}
+			contentsSize.x += 22.f;
 
 			// add margin
 			const float margin = 8.f;
@@ -719,7 +717,7 @@ namespace spades {
 
 			// draw border
 			switch (alertType) {
-				case AlertType::Notice: color = Vector4(0.f, 0.f, 0.f, 0.f); break;
+				case AlertType::Notice: color = Vector4(0.f, 0.f, 0.f, 1.f); break;
 				case AlertType::Warning: color = Vector4(1.f, 1.f, 0.f, .7f); break;
 				case AlertType::Error: color = Vector4(1.f, 0.f, 0.f, .7f); break;
 			}
@@ -742,7 +740,7 @@ namespace spades {
 
 			// draw icon
 			switch (alertType) {
-				case AlertType::Notice: color = Vector4(0.f, 0.f, 0.f, 0.f); break;
+				case AlertType::Notice: color = Vector4(0.f, 0.f, 0.f, 1.f); break;
 				case AlertType::Warning: color = Vector4(1.f, 1.f, 0.f, 1.f); break;
 				case AlertType::Error: color = Vector4(1.f, 0.f, 0.f, 1.f); break;
 			}
